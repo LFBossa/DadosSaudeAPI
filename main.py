@@ -44,3 +44,9 @@ async def main():
     pagina = load_file("pages/index.html")
     return HTMLResponse(content=pagina, status_code=200)
 
+@app.get("/saude/lista-doencas")
+async def listadoencas(): 
+    return load_json("dados/doencas-short.json")
+@app.get("/saude/lista-regioes")
+async def listaregioes(): 
+    return load_json("dados/regioes-short.json")
