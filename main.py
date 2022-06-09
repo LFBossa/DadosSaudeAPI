@@ -47,6 +47,18 @@ async def main():
 @app.get("/saude/lista-doencas")
 async def listadoencas(): 
     return load_json("dados/doencas-short.json")
+
+
+@app.get("/saude/lista-municipios")
+async def listamunicipios(regiao: Union[str, None] = None ):
+    muni = pd.read_pickle("dados/municipios.pd.pkl") 
+    if regiao:
+        lista_regioes = load_json("dados/regioes-short.json")
+        nome_regiao = lista_regioes[regiao]
+        return muni.query(f"regiao == '{nome_regiao}'").to_dict(orient="records")
+    else: 
+        return muni.to_dict(orient="records")
+
 @app.get("/saude/lista-regioes")
 async def listaregioes(): 
     return load_json("dados/regioes-short.json")
