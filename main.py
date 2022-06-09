@@ -19,3 +19,18 @@ def dump_json(object: dict, path: str, **kwargs):
     with open(path, "w") as fp:
         json.dump(object, fp, **kwargs)
 
+
+app = FastAPI()
+
+origins = [ 
+    "http://localhost",
+    "http://localhost:8886",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
