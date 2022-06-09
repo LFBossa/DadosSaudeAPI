@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <title>Demonstração Fast API</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+</head>
+
+<body>
+
+    <h1>Mapa Saúde SC</h1>
+
+    <div id="app">
+        <label for="doenca">Selecione a doença</label>
+        <select name="doenca" v-model="doenca_select">
+            <option v-for="(valor, key) in lista_doencas" :key="key" :value="key">
+                {{valor}}</option>
+        </select>
+
+        <label for="lista_municipios">Selecione o municipio</label>
+        <select name="lista_municipios" v-model="cidade_select">
+            <option v-for="registro in lista_cidades" :key="registro.ibge" :value="registro.ibge">
+                {{registro.municipio}} </option>
+        </select>
+        <p>
+            <button @click="get_serie">Buscar dados</button>
+        </p> 
+    </div>
+    <div id="chart"></div>
+
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            lista_doencas: [],
+            lista_cidades: [],
+            doenca_select: "",
+            regiao_select: "",
+            cidade_select: 0,
+            serie_dados: [],
+            url: ""
+        },
+        computed: {
+            serie_para_grafico: function () {
+                datas = this.serie_dados.referencia;
+                valores = this.serie_dados.atendimentos;
+                retorno = datas.map(function (x, i) {
+                    return { 'x': x, 'y': valores[i] }
+                })
+                return retorno
+            }
+        }
+        ,
+        methods: {
+            update_doencas: function (novosdados) {
+                this.lista_doencas = novosdados
+            },
+            update_municipios: function (novosdados) {
+                this.lista_cidades = novosdados
+            },
+            update_serie: function (novosdados) {
+                this.serie_dados = novosdados;
+
+            },
+
+            get_serie: function () {
+                doenca = this.doenca_select;
+                ibge = this.cidade_select;
+                $app = this;
+                axios.get(`/saude/serie/${doenca}/${ibge}/`).then(
+                    function (response) {
+                        $app.update_serie(response.data)
+                        doenca = $app.doenca_select
+                        chart.updateSeries([{
+                            name: `Atendimentos ${doenca}`,
+                            data: $app.serie_para_grafico
+                        }])
+
+                    }
+                )
+            }
+        }
+    })
+    axios.get("/saude/lista-doencas").then(
+        function (response) {
+            app.update_doencas(response.data)
+        }
+    )
+
+    axios.get("/saude/lista-municipios").then(
+        function (response) {
+            app.update_municipios(response.data)
+        }
+    )
+    var options = {
+        series: [],
+        chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight'
+        },
+        title: {
+            text: `Atendimentos de `,
+            align: 'left'
+        },
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        },
+        xaxis: {
+            type: 'datetime',
+        },
+        noData: {
+            text: 'Loading...'
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+</script>
+
+</html>
