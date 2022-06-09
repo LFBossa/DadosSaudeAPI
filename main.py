@@ -65,9 +65,12 @@ async def listaregioes():
 
 
 @app.get("/saude/serie/{doenca_short}/{ibge}")
-async def seriedoenca(doenca_short: str, ibge: int ):
-
+async def seriedoenca(doenca_short: str, ibge: int, por_mil: bool = False ):
     lista_doencas = load_json("dados/doencas-short.json")
     doenca = lista_doencas[doenca_short]
-    pesquisa = saude.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
+    if por_mil:
+        pesquisa = indices.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
+    else:
+        pesquisa = saude.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
     return pesquisa.to_dict(orient="list")
+ 
