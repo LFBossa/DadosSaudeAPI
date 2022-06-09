@@ -39,3 +39,8 @@ app.add_middleware(
 saude = pd.read_pickle("dados/saude-series.pd.pkl")
 indices = pd.read_pickle("dados/indices.pd.pkl")
 
+@app.get("/", response_class=HTMLResponse)
+async def main():
+    pagina = load_file("pages/index.html")
+    return HTMLResponse(content=pagina, status_code=200)
+
