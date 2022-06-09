@@ -62,3 +62,12 @@ async def listamunicipios(regiao: Union[str, None] = None ):
 @app.get("/saude/lista-regioes")
 async def listaregioes(): 
     return load_json("dados/regioes-short.json")
+
+
+@app.get("/saude/serie/{doenca_short}/{ibge}")
+async def seriedoenca(doenca_short: str, ibge: int ):
+
+    lista_doencas = load_json("dados/doencas-short.json")
+    doenca = lista_doencas[doenca_short]
+    pesquisa = saude.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
+    return pesquisa.to_dict(orient="list")
