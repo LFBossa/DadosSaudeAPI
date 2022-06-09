@@ -34,3 +34,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+saude = pd.read_pickle("dados/saude-series.pd.pkl")
+indices = pd.read_pickle("dados/indices.pd.pkl")
+
