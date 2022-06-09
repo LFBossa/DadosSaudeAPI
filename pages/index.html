@@ -18,14 +18,15 @@
             <option v-for="(valor, key) in lista_doencas" :key="key" :value="key">
                 {{valor}}</option>
         </select>
-
+        <br>
         <label for="lista_municipios">Selecione o municipio</label>
         <select name="lista_municipios" v-model="cidade_select">
             <option v-for="registro in lista_cidades" :key="registro.ibge" :value="registro.ibge">
                 {{registro.municipio}} </option>
         </select>
         <p>
-            <button @click="get_serie">Buscar dados</button>
+            <input v-model="por_mil" type="checkbox" name="pormil"><label for="pormil">Resultado por mil habitantes</label>
+             <button @click="get_serie">Buscar dados</button>
         </p> 
     </div>
     <div id="chart"></div>
@@ -41,6 +42,7 @@
             regiao_select: "",
             cidade_select: 0,
             serie_dados: [],
+            por_mil: false,
             url: ""
         },
         computed: {
@@ -69,16 +71,22 @@
             get_serie: function () {
                 doenca = this.doenca_select;
                 ibge = this.cidade_select;
+                p1000 = this.por_mil;
                 $app = this;
-                axios.get(`/saude/serie/${doenca}/${ibge}/`).then(
+                axios.get(`/saude/serie/${doenca}/${ibge}/?por_mil=${p1000}`).then(
                     function (response) {
                         $app.update_serie(response.data)
-                        doenca = $app.doenca_select
+                        doenca = $app.lista_doencas[$app.doenca_select];
                         chart.updateSeries([{
-                            name: `Atendimentos ${doenca}`,
+                            name: `${doenca}`,
                             data: $app.serie_para_grafico
                         }])
-
+                        chart.updateOptions({title: {text: `Atendimentos de ${doenca}`} })
+                        if(p1000) {
+                            chart.updateOptions({yaxis: {labels: {formatter: (value, index) => value.toFixed(1) }}})
+                        } else {
+                            chart.updateOptions({yaxis: {labels: {formatter: (value, index) => value }}})
+                        }
                     }
                 )
             }
@@ -101,7 +109,7 @@
             height: 350,
             type: 'line',
             zoom: {
-                enabled: false
+                enabled: true
             }
         },
         dataLabels: {
