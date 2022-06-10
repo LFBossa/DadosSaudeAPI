@@ -101,3 +101,7 @@ async def saudeestado(doenca_short: str, ano: int):
     series = SAUDE.query(f"ano == {ano}").groupby("Ibge").sum()[doenca]/POPULACAO.set_index("IBGE")[str(ano)]*1000
     return series.to_dict()
 
+
+@app.get("/geometria/")
+async def geometria():
+    return load_json("dados/contornos-municipios.json")
