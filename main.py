@@ -36,8 +36,12 @@ app.add_middleware(
 )
 
 
-saude = pd.read_pickle("dados/saude-series.pd.pkl")
-indices = pd.read_pickle("dados/indices.pd.pkl")
+SAUDE = pd.read_pickle("dados/saude-series.pd.pkl")
+INDICES = pd.read_pickle("dados/indices.pd.pkl")
+POPULACAO = pd.read_csv("dados/populacao.csv")
+MUNICIPIOS = pd.read_pickle("dados/municipios.pd.pkl")
+LISTA_DOENCAS = load_json("dados/doencas-short.json")
+LISTA_REGIOES = load_json("dados/regioes-short.json")
 
 @app.get("/", response_class=HTMLResponse)
 async def main():
