@@ -95,3 +95,9 @@ async def populacao(ibge: Union[int, None] = None , regiao: Union[str, None] = N
     else:
         raise HTTPException(status_code=400, detail="A requisição precisa ter um parâmetro ibge ou regiao não nulos") 
  
+@app.get("/saude/estado/{doenca_short}/")
+async def saudeestado(doenca_short: str, ano: int):
+    doenca = LISTA_DOENCAS[doenca_short]
+    series = SAUDE.query(f"ano == {ano}").groupby("Ibge").sum()[doenca]/POPULACAO.set_index("IBGE")[str(ano)]*1000
+    return series.to_dict()
+
