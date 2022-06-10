@@ -56,31 +56,28 @@ async def main():
 
 @app.get("/saude/lista-doencas")
 async def listadoencas(): 
-    return load_json("dados/doencas-short.json")
+    return LISTA_DOENCAS
 
 
 @app.get("/saude/lista-municipios")
-async def listamunicipios(regiao: Union[str, None] = None ):
-    muni = pd.read_pickle("dados/municipios.pd.pkl") 
-    if regiao:
-        lista_regioes = load_json("dados/regioes-short.json")
-        nome_regiao = lista_regioes[regiao]
-        return muni.query(f"regiao == '{nome_regiao}'").to_dict(orient="records")
+async def listamunicipios(regiao: Union[str, None] = None ): 
+    if regiao: 
+        nome_regiao = LISTA_REGIOES[regiao]
+        return MUNICIPIOS.query(f"regiao == '{nome_regiao}'").to_dict(orient="records")
     else: 
-        return muni.to_dict(orient="records")
+        return MUNICIPIOS.to_dict(orient="records")
 
 @app.get("/saude/lista-regioes")
 async def listaregioes(): 
-    return load_json("dados/regioes-short.json")
+    return LISTA_REGIOES
 
 
 @app.get("/saude/serie/{doenca_short}/{ibge}")
-async def seriedoenca(doenca_short: str, ibge: int, por_mil: bool = False ):
-    lista_doencas = load_json("dados/doencas-short.json")
-    doenca = lista_doencas[doenca_short]
+async def seriedoenca(doenca_short: str, ibge: int, por_mil: bool = False ): 
+    doenca = LISTA_DOENCAS[doenca_short]
     if por_mil:
-        pesquisa = indices.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
+        pesquisa = INDICES.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
     else:
-        pesquisa = saude.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
+        pesquisa = SAUDE.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
     return pesquisa.to_dict(orient="list")
  
