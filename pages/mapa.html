@@ -1,0 +1,171 @@
+<html>
+
+<head>
+    <title>Demonstração Fast API</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+        crossorigin=""></script>
+    <style>
+        #map {
+            width: 800px;
+            height: 500px;
+        }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+
+        .legend {
+            text-align: left;
+            line-height: 18px;
+            color: #555;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Mapa Saúde SC</h1>
+    <div id="app">
+
+        <button @click="gera_mapa">Gera Mapa</button>
+        <button @click="apaga_mapa">Apaga Mapa</button>
+        <button @click="busca_dados">Busca dados</button>
+        <div id="mapa" style="height: 500px;"></div>
+
+    </div>
+
+</body>
+<script>
+
+    const COLOR_MAP = [
+        "#7B3294",
+        "#C2A5CF",
+        "#F7F7F7",
+        "#A6DBA0",
+        "#008837"]
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            geometria: [],
+            indices: {},
+            mapa: null,
+            geojson_handler: null,
+        },
+        computed: {
+            geojson: function () {
+
+                return JSON.parse(JSON.stringify(this.geometria))
+            }
+        },
+        methods: {
+            update_geometria: function (dados) {
+                this.geometria = dados
+            },
+            update_mapa: function (dados) {
+                this.mapa = dados
+            },
+            update_indices: function (dados) {
+                this.indices = dados;
+                // lista de pares [chave, valor]
+                var items = Object.keys(dados).map((key) => { return [key, dados[key]] });
+                // ordena pelo valor
+                items.sort((first, second) => { return first[1] - second[1] });
+                var N = items.length;
+                var RANKING = {}
+                for (var i in items) {
+                    var rank = Math.floor(5 * i / N);
+                    RANKING[items[i][0]] = rank;
+                }
+
+                for (let x of this.geometria.features) {
+                    var ibge = x.properties.id;
+                    x.properties.indice = app.indices[ibge];
+                    x.properties.rank = RANKING[ibge];
+                }
+
+
+            },
+            busca_dados: function () {
+                axios.get("/saude/estado/hipertensao/?ano=2019").then(
+                    function (response) {
+                        app.update_indices(response.data)
+                    }
+                )
+            },
+            gera_mapa: function () {
+                var collection = this.geojson;
+                var mapa = this.mapa;
+                var geoj = L.geoJson(collection, {
+                    weight: 0.3,
+                    style: function (feature) {
+                        return { fillColor: COLOR_MAP[feature.properties.rank] };
+                    }
+                })
+                geoj.addTo(mapa);
+                this.geojson_handler = geoj;
+            },
+            apaga_mapa: function () {
+                this.geojson_handler.remove()
+            }
+        }
+    })
+
+    axios.get("/geometria/").then(function (response) {
+        app.update_geometria(response.data)
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var map = L.map('mapa').setView([-27.2958165, -50.5933218], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap | LABMAC'
+        }).addTo(map);
+
+        var legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'info legend');
+            var labels = [];
+            for (var i = 0; i < 5; i++) {
+                labels.push(
+                    `<i style="background: ${COLOR_MAP[i]}"></i> ${5 - i}º quintil`);
+            }
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+
+        legend.addTo(map);
+        app.update_mapa(map);
+    }, false);
+
+</script>
+
+</html>
