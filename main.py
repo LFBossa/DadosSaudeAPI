@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from typing import Union
 import json
 import pandas as pd 
@@ -80,7 +80,6 @@ async def seriedoenca(doenca_short: str, ibge: int, por_mil: bool = False ):
     else:
         pesquisa = SAUDE.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
     return pesquisa.to_dict(orient="list")
-
 
 
 @app.get("/populacao/")
