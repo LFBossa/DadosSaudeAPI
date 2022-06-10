@@ -80,4 +80,18 @@ async def seriedoenca(doenca_short: str, ibge: int, por_mil: bool = False ):
     else:
         pesquisa = SAUDE.query(f"Ibge == {ibge}")[["referencia",doenca]].rename(columns={doenca: "atendimentos"})
     return pesquisa.to_dict(orient="list")
+
+
+
+@app.get("/populacao/")
+async def populacao(ibge: Union[int, None] = None , regiao: Union[str, None] = None ):
+    if ibge:
+        pesquisa = POPULACAO.query(f"IBGE == {ibge}")
+        return pesquisa.to_dict(orient="records")[0]
+    elif regiao:
+        região = LISTA_REGIOES[regiao]
+        lista_ibge = MUNICIPIOS.query(f"regiao == '{região}'").ibge.unique()
+        return POPULACAO.query(f"IBGE in {list(lista_ibge)}").sum().to_dict()
+    else:
+        raise HTTPException(status_code=400, detail="A requisição precisa ter um parâmetro ibge ou regiao não nulos") 
  
