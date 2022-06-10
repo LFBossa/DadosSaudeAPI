@@ -48,6 +48,12 @@ async def main():
     pagina = load_file("pages/index.html")
     return HTMLResponse(content=pagina, status_code=200)
 
+
+@app.get("/mapa", response_class=HTMLResponse)
+async def main():
+    pagina = load_file("pages/mapa.html")
+    return HTMLResponse(content=pagina, status_code=200)
+
 @app.get("/saude/lista-doencas")
 async def listadoencas(): 
     return load_json("dados/doencas-short.json")
