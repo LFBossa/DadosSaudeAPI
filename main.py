@@ -99,6 +99,16 @@ async def saudeestado(doenca_short: str, ano: int):
     doenca = LISTA_DOENCAS[doenca_short]
     series = SAUDE.query(f"ano == {ano}").groupby("Ibge").sum()[doenca]/POPULACAO.set_index("IBGE")[str(ano)]*1000
     return series.to_dict()
+ 
+@app.get("/saude/serie/{doenca_short}")
+async def saudeseries(doenca_short: str, regiao: str):
+    doenca = LISTA_DOENCAS[doenca_short]
+    região = LISTA_REGIOES[regiao]
+    MUNICIPIOS_IBGE = MUNICIPIOS.set_index("ibge")
+    SAUDE['regiao'] = SAUDE.Ibge.apply(lambda x: MUNICIPIOS_IBGE.loc[x,'regiao'] )
+    agregado = SAUDE.groupby(["regiao",'referencia']).sum()
+    return agregado.loc[região,doenca].to_dict()
+    return [doenca, região]
 
 
 @app.get("/geometria/")
