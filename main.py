@@ -40,6 +40,7 @@ SAUDE = pd.read_pickle("dados/saude-series.pd.pkl")
 INDICES = pd.read_pickle("dados/indices.pd.pkl")
 POPULACAO = pd.read_csv("dados/populacao.csv")
 MUNICIPIOS = pd.read_pickle("dados/municipios.pd.pkl")
+INDICE_POR_REGIAO = pd.read_pickle("dados/indiceporregiao.pd.pkl")
 LISTA_DOENCAS = load_json("dados/doencas-short.json")
 LISTA_REGIOES = load_json("dados/regioes-short.json")
 
@@ -104,12 +105,7 @@ async def saudeestado(doenca_short: str, ano: int):
 async def saudeseries(doenca_short: str, regiao: str):
     doenca = LISTA_DOENCAS[doenca_short]
     região = LISTA_REGIOES[regiao]
-    MUNICIPIOS_IBGE = MUNICIPIOS.set_index("ibge")
-    SAUDE['regiao'] = SAUDE.Ibge.apply(lambda x: MUNICIPIOS_IBGE.loc[x,'regiao'] )
-    agregado = SAUDE.groupby(["regiao",'referencia']).sum()
-    return agregado.loc[região,doenca].to_dict()
-    return [doenca, região]
-
+    return INDICE_POR_REGIAO.loc[região, doenca].to_dict()
 
 @app.get("/geometria/")
 async def geometria():
