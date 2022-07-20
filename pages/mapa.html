@@ -99,7 +99,7 @@
                 var N = items.length;
                 var RANKING = {}
                 for (var i in items) {
-                    var rank = Math.floor(5 * i / N);
+                    var rank = Math.floor(3 * i / N);
                     RANKING[items[i][0]] = rank;
                 }
 
@@ -153,7 +153,7 @@
 
             var div = L.DomUtil.create('div', 'info legend');
             var labels = [];
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 3; i++) {
                 labels.push(
                     `<i style="background: ${COLOR_MAP[i]}"></i> ${5 - i}º quintil`);
             }
