@@ -125,6 +125,10 @@
                     weight: 0.3,
                     style: function (feature) {
                         return { fillColor: COLOR_MAP[feature.properties.rank] };
+                    },
+                    onEachFeature: function (feature, layer){
+                        layer.bindPopup(`<b>Cidade</b>: ${feature.properties.name}<br>
+                        <b>Incidência</b>: ${feature.properties.indice.toFixed(1)}/mil hab.`)
                     }
                 })
                 geoj.addTo(mapa);
