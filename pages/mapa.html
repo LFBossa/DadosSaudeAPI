@@ -155,7 +155,7 @@
             var labels = [];
             for (var i = 0; i < 3; i++) {
                 labels.push(
-                    `<i style="background: ${COLOR_MAP[i]}"></i> ${5 - i}º quintil`);
+                    `<i style="background: ${COLOR_MAP[i]}"></i> ${i+1}º tercil`);
             }
 
             div.innerHTML = labels.join('<br>');
