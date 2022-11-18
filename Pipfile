@@ -9,6 +9,8 @@ fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 requests = "*"
 pysus = "*"
+selenium = "*"
+webdriver-manager = "*"
 
 [dev-packages]
 ipykernel = "*"
