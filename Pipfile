@@ -8,6 +8,7 @@ pandas = "*"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 requests = "*"
+pysus = "*"
 
 [dev-packages]
 ipykernel = "*"
