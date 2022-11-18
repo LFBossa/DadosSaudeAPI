@@ -1,0 +1,33 @@
+MS/SAPS/Departamento de Saúde da Família ­ DESF 
+Dados sujeitos à alteração 
+---Descrição dos Filtros Utilizados---
+Competência: JUN/2013.
+Tipo de Produção: Atendimento Individual.
+"Probl/ Condição Avaliada: Asma, Desnutrição, Diabetes, DPOC, Hipertensão arterial, Obesidade, Pré-natal, Puericultura, Puerpério (até 42 dias), Saúde sexual e reprodutiva, Tabagismo, Usuário de álcool, Usuário de outras drogas, Saúde mental, Reabilitação, D.Transmissíveis - Dengue, Doenças transmissíveis - DST, D.Transmissíveis - Hanseníase, D.Transmissíveis - Tuberculose, Rast. câncer de mama, Rast. câncer do colo do útero, Rast. risco cardiovascular."
+
+
+Uf;Ibge;Municipio;Asma;Desnutrição;Diabetes;DPOC;Hipertensão arterial;Obesidade;Pré-natal;Puericultura;Puerpério (até 42 dias);Saúde sexual e reprodutiva;Tabagismo;Usuário de álcool;Usuário de outras drogas;Saúde mental;Reabilitação;D.Transmissíveis - Dengue;Doenças transmissíveis - DST;D.Transmissíveis - Hanseníase;D.Transmissíveis - Tuberculose;Rast. câncer de mama;Rast. câncer do colo do útero;Rast. risco cardiovascular;
+MG;316800;TAIOBEIRAS;48;1;1;0;0;0;0;0;0;0;0;0;7;3;0;0;1;0;1;0;0;0;
+BA;292890;SÃO DESIDÉRIO;0;0;0;0;0;0;0;0;0;0;0;0;7;0;0;0;0;0;0;0;0;0;
+MG;316100;SÃO DOMINGOS DO PRATA;1;0;0;0;0;1;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+ES;320120;CACHOEIRO DE ITAPEMIRIM;0;0;0;0;0;0;0;0;3;0;0;0;0;0;0;0;0;0;0;0;0;0;
+PR;412400;SANTANA DO ITARARÉ;0;6;0;0;0;10;0;16;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+AP;160080;VITÓRIA DO JARI;0;0;0;0;1;0;10;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+RN;241410;TENENTE ANANIAS;0;0;0;0;0;0;0;0;0;0;0;0;0;41;0;0;0;0;0;0;0;0;
+RN;241200;SÃO GONÇALO DO AMARANTE;0;0;0;0;1;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;0;
+RN;241420;TIBAU DO SUL;2;0;0;0;3;5;0;0;0;0;1;0;0;0;0;0;0;0;0;0;0;0;
+MA;210675;MIRANDA DO NORTE;0;0;0;0;0;0;0;0;0;0;0;0;5;0;0;0;0;0;0;0;0;0;
+RN;241220;SÃO JOSÉ DE MIPIBU;326;18;26;4;268;98;95;14;7;35;124;109;40;41;1;0;3;9;1;5;52;0;
+RS;430235;BOM PRINCÍPIO;0;0;0;0;0;0;0;0;0;0;0;0;6;0;0;0;0;0;0;0;0;0;
+BA;292220;MUNIZ FERREIRA;0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;0;0;0;0;
+RN;241310;SENADOR ELÓI DE SOUZA;17;0;0;0;0;0;0;0;0;0;0;0;3;90;0;0;0;4;0;0;0;0;
+AM;130353;PRESIDENTE FIGUEIREDO;0;0;0;0;0;0;0;0;0;0;0;0;138;0;0;0;0;0;0;0;0;0;
+PB;251600;SOLÂNEA;7;0;1;0;0;0;3;2;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+SP;354140;PRESIDENTE PRUDENTE;10;0;1;2;6;1;7;0;0;0;0;3;3;5;0;4;0;4;0;4;0;0;
+PB;250160;BARRA DE SANTA ROSA;0;0;0;0;0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;
+MT;510840;VÁRZEA GRANDE;0;0;0;0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;0;
+
+
+Fonte: Sistema de Informação em Saúde para a Atenção Básica - SISAB;
+E-mail: sisab@saude.gov.br;
+Dado gerado em: 18 de Novembro de 2022 - 17:44h
