@@ -6,7 +6,8 @@ import re
 from io import StringIO
 from typing import List
 
-data_folder = Path(__file__).parent.parent /  "raw_data/SISAB"
+raw_data_folder = Path(__file__).parent.parent /  "raw_data/SISAB"
+data_folder = Path(__file__).parent.parent /  "data/SISAB"
 
 def ref_from_filename(file_path : Path) -> tuple: 
     filename = file_path.stem
@@ -49,6 +50,6 @@ def consolidate_dataframes(file_list : List[Path]) -> pd.DataFrame:
 
 
 if __name__ == "__main__": 
-    lista_arquivos = data_folder.glob("*.log")
+    lista_arquivos = raw_data_folder.glob("*.log")
     DF = consolidate_dataframes(lista_arquivos)
     DF.to_csv(data_folder / "SISAB-consolidado.csv", index=False, sep=",")
