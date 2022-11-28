@@ -42,4 +42,3 @@ if __name__ == "__main__":
         with open(caminho, "w") as fp:
             json.dump(topojson, fp, ensure_ascii=False) 
       
-    
