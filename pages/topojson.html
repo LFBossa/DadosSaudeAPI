@@ -154,8 +154,23 @@ const zip = (...arrays) => {
         }
       },
       onEachFeature: function (feature, layer) {
-        layer.bindPopup(`<p>${feature.properties.codarea}</p>
-        <b>${feature.properties.municipio}</b>
+        try {
+          var indice = feature.properties.indice.toFixed(1)
+        } catch (e){
+          var indice = null
+        } 
+        layer.bindPopup(`<table>
+          <tr>
+            <td><em>${app.doenca_selecionada}</em></td>
+            <td><b>${feature.properties.municipio}</b></td>
+          </tr>
+          <tr>
+            <td>Atendimentos por mil/hab</td><td>${indice}</td>
+          </tr>
+          <tr>
+            <td>População</td><td>${feature.properties.populacao}</td>
+          </tr>
+        </table>
         `)
       }
       }).addTo(this.mapa)
