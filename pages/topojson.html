@@ -113,6 +113,10 @@
 }
 
 const COLOR_MAP = ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
+const zip = (...arrays) => {
+    const length = Math.min(...arrays.map(arr => arr.length));
+    return Array.from({ length }, (value, index) => arrays.map((array => array[index])));
+};
   var app = new Vue({
     el: '#app',
     data: {
