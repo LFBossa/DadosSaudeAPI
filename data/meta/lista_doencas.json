@@ -1,0 +1,25 @@
+{
+  "doenças": [
+    "Asma",
+    "Desnutrição",
+    "Diabetes",
+    "DPOC",
+    "Hipertensão arterial",
+    "Obesidade",
+    "Pré-natal",
+    "Puericultura",
+    "Puerpério (até 42 dias)",
+    "Saúde sexual e reprodutiva",
+    "Tabagismo",
+    "Usuário de álcool",
+    "Usuário de outras drogas",
+    "Saúde mental",
+    "Reabilitação",
+    "D.Transmissíveis - Dengue",
+    "Doenças transmissíveis - DST",
+    "D.Transmissíveis - Hanseníase",
+    "D.Transmissíveis - Tuberculose",
+    "Rast. câncer de mama",
+    "Rast. câncer do colo do útero"
+  ]
+}
