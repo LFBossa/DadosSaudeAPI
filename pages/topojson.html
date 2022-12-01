@@ -48,8 +48,6 @@
       <optgroup v-for="(array_estados, regiao) in estados_por_regiao" :label="regiao">
         <option v-for="x in array_estados" :value="x.sigla">{{x.nome}}</option> 
       </div> 
-    </div>
-      </div> 
     </select>
     <h2>Doença</h2>
     <select v-model="doenca_selecionada" @change="carrega_doenca"> 
@@ -232,7 +230,6 @@ const zip = (...arrays) => {
       maxZoom: 19
     });
     //https://colorbrewer2.org/?type=diverging&scheme=RdYlBu&n=5
-    const COLOR_MAP = ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
     const QUANTIS = 5;
 
     bglayer_Positron.addTo(GLOBAL_MAP);
@@ -257,6 +254,7 @@ const zip = (...arrays) => {
       app.update_mapa(GLOBAL_MAP);
       app.add_layer()
       app.get_json("/data/meta/estados.json").then(data => app.lista_estados = data)
+      app.get_json("/data/meta/lista_doencas.json").then(data => app.lista_doencas = data.doenças)
   }, false);
 </script>
 
