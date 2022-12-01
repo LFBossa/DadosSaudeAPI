@@ -136,15 +136,22 @@ const zip = (...arrays) => {
       update_mapa: function(dados){
         this.mapa = dados;
       },
+      reload_mapa: function(){
+        if(this.geojson_layer){
+          this.geojson_layer.clearLayers()
+        }
+        this.add_layer()
+        this.mapa.flyToBounds(this.geojson_layer.getBounds())
+      },
       add_layer: function(){
-        this.geojson_layer = L.topoJson(null, {
+        this.geojson_layer = L.topoJson(this.topojson_data, {
       style: function (feature) {
         return {
           color: "#000",
           opacity: 1,
           weight: 1,
-          fillColor: '#35495d',
-          fillOpacity: 0.8
+          fillColor: COLOR_MAP[feature.properties.ranking],
+          fillOpacity: 0.7
         }
       },
       onEachFeature: function (feature, layer) {
