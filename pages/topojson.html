@@ -54,7 +54,8 @@
         <option v-for="x in lista_doencas">{{x}}</option>   
     </select>
     <h2>Ano</h2>
-    <input id="rangeano" v-model="ano_selecionado" type="range" min="2014" max="2022" step="1"><label for="rangeano">{{ano_selecionado}}</label>
+    <input @change="carrega_doenca" id="rangeano" v-model="ano_selecionado" type="range" min="2014" max="2022" step="1">
+    <label for="rangeano">{{ano_selecionado}}</label>
 
   </div>
   <div id="map-container"></div>
