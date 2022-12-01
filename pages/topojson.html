@@ -161,19 +161,19 @@ const zip = (...arrays) => {
       }
       }).addTo(this.mapa)
       },
-      carrega_estado: function (uf) {
-        if(this.geojson_layer){
-          this.geojson_layer.clearLayers()
-        }
+      carrega_estado: function () {
+        var uf = this.estado_selecionado
+        
         this.get_json('/data/geodata/' + uf + '.topojson').then(data =>{ 
           this.topojson_data = data;
-          this.geojson_layer.addData(data) 
-          this.mapa.flyToBounds(this.geojson_layer.getBounds())
         });
 
         this.get_json('/data/SISAB/SISAB-' + uf + '.json').then( data =>{
           this.atendimento_data = data; 
+        this.reload_mapa()
         });
+        
+      },
       },
       get_json: async function (url) {
         let response = await fetch(url);
