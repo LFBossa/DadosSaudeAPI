@@ -174,6 +174,41 @@ const zip = (...arrays) => {
         });
         
       },
+      carrega_doenca: function (){
+
+        const inteira = (a,b) => (a - (a%b))/b 
+
+        var dados = []
+        for (var [codibge, value] of Object.entries(this.atendimento_data)) {
+          var lista_valores = value[this.doenca_selecionada]
+          var lista_referencias = value.referencia
+          var anos = lista_referencias.map( x => inteira(x,100))
+          var lista_populacao = value.populacao
+          // igual python zip 
+          var agregados = zip(lista_referencias, anos, lista_valores, lista_populacao )
+          // filtra pelo ano selecionado 
+          var filtrado = agregados.filter( x => x[1] == this.ano_selecionado )
+          // soma o total de atendimentos
+          var soma = filtrado.reduce( (acc, curr) => acc + curr[2], 0 )
+          var populacao = filtrado[0][3]
+          var resultado = (1000*soma/populacao)
+          dados.push([codibge, resultado, 0])
+        }  
+        dados.sort( (a,b) => a[1] - b[1] )
+        var N = dados.length;
+        for(var i = 0; i < N; i++ ){
+          dados[i][2] = Math.floor(5 * i / N)
+        }
+        dictdados = {}
+        dados.forEach(x => dictdados[x[0]] = {"indice": x[1], "ranking": x[2]})
+        console.log(dados)
+        this.topojson_data.objects.foo.geometries.forEach( x=> {var cod = x.properties.codarea;
+           x.properties.indice = dictdados[cod].indice
+           x.properties.ranking = dictdados[cod].ranking
+        })
+
+        this.reload_mapa()
+  
       },
       get_json: async function (url) {
         let response = await fetch(url);
