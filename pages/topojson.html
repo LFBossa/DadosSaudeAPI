@@ -42,10 +42,10 @@
 
   <!--The div in which the map will be created-->
   <div id="app">
-    
-      <button v-for="x in lista_estados" 
-      @click="carrega_estado(x)">{{x}}</button> 
-    
+    <div v-for="(array_estados, regiao) in estados_por_regiao"><h3>{{regiao}}</h3>
+      <button v-for="x in array_estados" 
+      @click="carrega_estado(x.sigla)">{{x.nome}}</button> 
+    </div>
     
   </div>
   <div id="map-container"></div>
@@ -90,6 +90,16 @@
   </script>
 </body>
 <script>
+  function groupBy(array, key){
+  const result = {}
+  array.forEach(item => {
+    if (!result[item[key]]){
+      result[item[key]] = []
+    }
+    result[item[key]].push(item)
+  })
+  return result
+}
   var app = new Vue({
     el: '#app',
     data: {
@@ -97,9 +107,9 @@
       geojson_layer: null, 
       topojson_data: null,
       atendimento_data: null,
-      lista_estados: ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG',
-       'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR',
-       'RS', 'SC', 'SE', 'SP', 'TO']
+      topojson_database: null,
+      atendimento_database: null,
+      lista_estados: [],
     },
     methods: {
       update_mapa: function(dados){
@@ -121,7 +131,7 @@
         <b>${feature.properties.municipio}</b>
         `)
       }
-    }).addTo(this.mapa)
+      }).addTo(this.mapa)
       },
       carrega_estado: function (uf) {
         if(this.geojson_layer){
@@ -129,7 +139,8 @@
         }
         this.get_json('/data/geodata/' + uf + '.topojson').then(data =>{ 
           this.topojson_data = data;
-          this.geojson_layer.addData(data)
+          this.geojson_layer.addData(data) 
+          this.mapa.flyToBounds(this.geojson_layer.getBounds())
         });
 
         this.get_json('/data/SISAB/SISAB-' + uf + '.json').then( data =>{
@@ -140,6 +151,11 @@
         let response = await fetch(url);
         let data = await response.json(); 
         return data;
+      }
+    },
+    computed: {
+      estados_por_regiao: function(){
+        return groupBy(this.lista_estados, "regiao")
       }
     }
   })
@@ -177,6 +193,7 @@
       legend.addTo(GLOBAL_MAP);
       app.update_mapa(GLOBAL_MAP);
       app.add_layer()
+      app.get_json("/data/meta/estados.json").then(data => app.lista_estados = data)
   }, false);
 </script>
 
