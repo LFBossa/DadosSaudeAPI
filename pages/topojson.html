@@ -1,98 +1,183 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>A basic map with Leaflet</title>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Exemplo básico de mapa</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <!--add Leaflet CSS-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin="" />
+
+  <!--our own style rules-->
+  <style type="text/css">
+    body,
+    html {
+      height: 90%;
+    }
+
+    #map-container {
+      height: 100%;
+    }
+
+    .legend {
+            text-align: left;
+            line-height: 18px;
+            color: #555;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+  </style>
+</head>
+
+<body>
+
+  <!--The div in which the map will be created-->
+  <div id="app">
     
-    <!--add Leaflet CSS-->
-     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-      integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-      crossorigin=""/>
+      <button v-for="x in lista_estados" 
+      @click="carrega_estado(x)">{{x}}</button> 
     
-    <!--our own style rules-->
-    <style type="text/css">
-      body, html {
-        height: 90%;
-      }
-      #map-container {
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
     
-    <!--The div in which the map will be created-->
-    <div id="map-container"></div>
-    
-    <!--load leaflet.js-->
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+  </div>
+  <div id="map-container"></div>
+  <!--load leaflet.js-->
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 
-    <!--we need the topojson library as well-->
-    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
-    
-    <!--our own code to create the map-->
-    <script>
-      let map = L.map('map-container');
-      map.setView([-26.268, -53.998], 7);
-      let bglayer_Positron = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-      });
-      
-      bglayer_Positron.addTo(map);
-      
-      //extend Leaflet to create a GeoJSON layer from a TopoJSON file
-      L.TopoJSON = L.GeoJSON.extend({
-        addData: function (data) {
-          var geojson, key;
-          if (data.type === "Topology") {
-            for (key in data.objects) {
-              if (data.objects.hasOwnProperty(key)) {
-                geojson = topojson.feature(data, data.objects[key]);
-                L.GeoJSON.prototype.addData.call(this, geojson);
-              }
+  <!--we need the topojson library as well-->
+  <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+
+  <!--our own code to create the map-->
+  <script>
+    //extend Leaflet to create a GeoJSON layer from a TopoJSON file
+    L.TopoJSON = L.GeoJSON.extend({
+      addData: function (data) {
+        var geojson, key;
+        if (data.type === "Topology") {
+          for (key in data.objects) {
+            if (data.objects.hasOwnProperty(key)) {
+              geojson = topojson.feature(data, data.objects[key]);
+              L.GeoJSON.prototype.addData.call(this, geojson);
             }
-            return this;
           }
-          L.GeoJSON.prototype.addData.call(this, data);
           return this;
         }
-      });
-      L.topoJson = function (data, options) {
-        return new L.TopoJSON(data, options);
-      };
-      //create an empty geojson layer
-      //with a style and a popup on click
-      var geojson = L.topoJson(null, {
-        style: function(feature){
-          return {
-            color: "#000",
-            opacity: 1,
-            weight: 1,
-            fillColor: '#35495d',
-            fillOpacity: 0.8
-          }
-        },
-        onEachFeature: function(feature, layer) {
-          layer.bindPopup(`<p>${feature.properties.codarea}</p><b>${feature.properties.id}</b>`)
+        L.GeoJSON.prototype.addData.call(this, data);
+        return this;
+      }
+    });
+    L.topoJson = function (data, options) {
+      return new L.TopoJSON(data, options);
+    }; 
+    //create an empty geojson layer
+    //with a style and a popup on click
+    
+    //fill: #317581;
+    //define a function to get and parse geojson from URL
+
+
+    //fetch the geojson and add it to our geojson layer 
+  </script>
+</body>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      mapa: null,
+      geojson_layer: null, 
+      topojson_data: null,
+      atendimento_data: null,
+      lista_estados: ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG',
+       'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR',
+       'RS', 'SC', 'SE', 'SP', 'TO']
+    },
+    methods: {
+      update_mapa: function(dados){
+        this.mapa = dados;
+      },
+      add_layer: function(){
+        this.geojson_layer = L.topoJson(null, {
+      style: function (feature) {
+        return {
+          color: "#000",
+          opacity: 1,
+          weight: 1,
+          fillColor: '#35495d',
+          fillOpacity: 0.8
         }
-      }).addTo(map);
-      //fill: #317581;
-      //define a function to get and parse geojson from URL
-      async function getGeoData(url) {
+      },
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(`<p>${feature.properties.codarea}</p>
+        <b>${feature.properties.municipio}</b>
+        `)
+      }
+    }).addTo(this.mapa)
+      },
+      carrega_estado: function (uf) {
+        if(this.geojson_layer){
+          this.geojson_layer.clearLayers()
+        }
+        this.get_json('/data/geodata/' + uf + '.topojson').then(data =>{ 
+          this.topojson_data = data;
+          this.geojson_layer.addData(data)
+        });
+
+        this.get_json('/data/SISAB/SISAB-' + uf + '.json').then( data =>{
+          this.atendimento_data = data; 
+        });
+      },
+      get_json: async function (url) {
         let response = await fetch(url);
-        let data = await response.json();
-        console.log(data)
+        let data = await response.json(); 
         return data;
       }
-      
-      //fetch the geojson and add it to our geojson layer
-      getGeoData('/data/geodata/SC.topojson').then(data => geojson.addData(data));
-      getGeoData('/data/geodata/RS.topojson').then(data => geojson.addData(data));
-      getGeoData('/data/geodata/PR.topojson').then(data => geojson.addData(data));
-    </script>
-  </body>
+    }
+  })
+
+  document.addEventListener('DOMContentLoaded', function () {
+    let GLOBAL_MAP = L.map('map-container');
+    GLOBAL_MAP.setView([-27.091069, -50.1712629], 6);
+    let bglayer_Positron = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    });
+    //https://colorbrewer2.org/?type=diverging&scheme=RdYlBu&n=5
+    const COLOR_MAP = ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
+    const QUANTIS = 5;
+
+    bglayer_Positron.addTo(GLOBAL_MAP);
+
+  
+
+    var legend = L.control({ position: 'bottomright' });
+
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+        var labels = [];
+        for (var i = 0; i < QUANTIS; i++) {
+            labels.push(
+                `<i style="background: ${COLOR_MAP[i]};"></i> ${ QUANTIS - i}º quintil`);
+        }
+
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+
+      legend.addTo(GLOBAL_MAP);
+      app.update_mapa(GLOBAL_MAP);
+      app.add_layer()
+  }, false);
+</script>
+
 </html>
