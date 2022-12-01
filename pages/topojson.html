@@ -190,19 +190,20 @@ const zip = (...arrays) => {
           var soma = filtrado.reduce( (acc, curr) => acc + curr[2], 0 )
           var populacao = filtrado[0][3]
           var resultado = (1000*soma/populacao)
-          dados.push([codibge, resultado, 0])
+          dados.push([codibge, resultado, 0, populacao])
         }  
-        dados.sort( (a,b) => a[1] - b[1] )
+        dados.sort( (a,b) => b[1] - a[1] )
         var N = dados.length;
         for(var i = 0; i < N; i++ ){
           dados[i][2] = Math.floor(5 * i / N)
         }
         dictdados = {}
-        dados.forEach(x => dictdados[x[0]] = {"indice": x[1], "ranking": x[2]})
+        dados.forEach(x => dictdados[x[0]] = {"indice": x[1], "ranking": x[2], "populacao": x[3]})
         console.log(dados)
         this.topojson_data.objects.foo.geometries.forEach( x=> {var cod = x.properties.codarea;
            x.properties.indice = dictdados[cod].indice
            x.properties.ranking = dictdados[cod].ranking
+           x.properties.populacao = dictdados[cod].populacao
         })
 
         this.reload_mapa()
