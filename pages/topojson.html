@@ -52,7 +52,7 @@
         <option v-for="x in array_estados" :value="x.sigla">{{x.nome}}</option> 
       </div> 
     </select>
-    <h2>Doença</h2>
+    <h2>Condição Avaliada</h2>
     <select v-model="doenca_selecionada" @change="carrega_doenca"> 
         <option v-for="x in lista_doencas">{{x}}</option>   
     </select>
