@@ -36,6 +36,9 @@
             margin-right: 8px;
             opacity: 0.7;
         }
+      .td-right{
+        text-align: right;
+      }
   </style>
 </head>
 
@@ -161,14 +164,18 @@ const zip = (...arrays) => {
         } 
         layer.bindPopup(`<table>
           <tr>
-            <td><em>${app.doenca_selecionada}</em></td>
-            <td><b>${feature.properties.municipio}</b></td>
+            <td>Condição avaliada</td>
+            <td class="td-right"><em>${app.doenca_selecionada}</em></td>
           </tr>
           <tr>
-            <td>Atendimentos por mil/hab</td><td>${indice}</td>
+            <td>Município</td>
+            <td class="td-right"><b>${feature.properties.municipio}</b></td>
           </tr>
           <tr>
-            <td>População</td><td>${feature.properties.populacao}</td>
+            <td>Atendimentos por mil/hab</td><td class="td-right">${indice}</td>
+          </tr>
+          <tr>
+            <td>População</td><td class="td-right">${feature.properties.populacao}</td>
           </tr>
         </table>
         `)
