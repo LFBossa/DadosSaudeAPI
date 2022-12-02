@@ -240,7 +240,11 @@ const zip = (...arrays) => {
     },
     computed: {
       estados_por_regiao: function(){
-        return groupBy(this.lista_estados, "regiao")
+        var agrupados = groupBy(this.lista_estados, "regiao")
+        Object.values(agrupados).forEach( lista => {
+            lista.sort( (a,b) =>  (a.nome > b.nome)? 1: -1 )
+        } )
+        return agrupados
       }
     }
   })
