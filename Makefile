@@ -16,6 +16,7 @@ all:
 clear: 
 	$(delcommand) raw_data/IBGE/*
 	$(delcommand) raw_data/SISAB/*
+	$(delcommand) raw_data/temp/*
 	$(delcommand) data/geodata/*
 	$(delcommand) data/IBGE/*
 	$(delcommand) data/meta/*
