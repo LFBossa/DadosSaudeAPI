@@ -21,7 +21,7 @@ def create_driver_chrome(download_path):
             "download.prompt_for_download": False,
     })
     
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager(version=version).install()), options=chrome_options) 
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options) 
     
     return driver
  
