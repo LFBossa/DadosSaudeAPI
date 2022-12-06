@@ -2,7 +2,16 @@
 pythoncommand := pipenv run python
 delcommand := rm -f
 
-all:
+directories:
+	mkdir -p raw_data/IBGE
+	mkdir -p raw_data/SISAB
+	mkdir -p raw_data/temp
+	mkdir -p data/geodata
+	mkdir -p data/IBGE
+	mkdir -p data/meta
+	mkdir -p data/SISAB
+
+all: directories
 	$(pythoncommand) src/IBGE-populacao.py
 	$(pythoncommand) src/IBGE-populacao-convert.py
 	$(pythoncommand) src/IBGE-geodata.py
