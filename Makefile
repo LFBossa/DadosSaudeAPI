@@ -11,6 +11,15 @@ directories:
 	mkdir -p data/meta
 	mkdir -p data/SISAB
 
+sisab:
+	$(pythoncommand) src/SISAB-bot.py
+	$(pythoncommand) src/SISAB-convert.py
+	$(pythoncommand) src/SISAB+IBGE-consolidate.py
+	$(pythoncommand) src/atendimentos-por-estado.py
+	$(pythoncommand) src/Metadados.py
+
+
+
 all: directories
 	$(pythoncommand) src/IBGE-populacao.py
 	$(pythoncommand) src/IBGE-populacao-convert.py
