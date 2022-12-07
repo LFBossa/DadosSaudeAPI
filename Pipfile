@@ -11,6 +11,8 @@ requests = "*"
 pysus = "*"
 selenium = "*"
 webdriver-manager = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [dev-packages]
 ipykernel = "*"
