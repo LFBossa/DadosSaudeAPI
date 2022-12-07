@@ -1,6 +1,6 @@
 # selenium 4
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 
@@ -13,15 +13,17 @@ from selenium.webdriver.common.by import By
 from pathlib import Path
 from time import sleep
 
-def create_driver(download_path):
+def create_driver_chrome(download_path):
     chrome_options = Options()
     chrome_options.add_experimental_option("prefs", {
+            "download.directory_upgrade": True,
             "download.default_directory": download_path,
-            "download.prompt_for_download": False
+            "download.prompt_for_download": False,
     })
+    
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options) 
+    
     return driver
-
  
 URL = "https://sisab.saude.gov.br/paginas/acessoRestrito/relatorio/federal/saude/RelSauProducao.xhtml"
 
@@ -94,10 +96,13 @@ def main():
     # ../raw_data/temp
     caminho_download = Path(__file__).parent.parent / 'raw_data/temp'
     # ../raw_data/SISAB
-    caminho_final =  caminho_download.parent / 'SISAB'
+    caminho_final =  caminho_download.parent / 'SISAB' 
+    # tava dando problema com o / final
+    download_target = caminho_download.resolve().as_posix() + "/"
+
 
     # cria um driver que vai fazer download na pasta especificada
-    driver = create_driver(caminho_download.as_posix()) 
+    driver = create_driver_chrome(download_target) 
     driver.get(URL)
 
     # espera a pagina carregar até aparecer o botão download
