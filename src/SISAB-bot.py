@@ -20,7 +20,7 @@ def create_driver_chrome(download_path):
             "download.default_directory": download_path,
             "download.prompt_for_download": False,
     })
-    
+    chrome_options.add_argument("--headless=new") 
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options) 
     
     return driver
