@@ -2,6 +2,7 @@ import re
 import json
 from pathlib import Path
 import requests
+import datetime
 
 RAW_DATA_PATH = Path(__file__).parent.parent / "raw_data"
 DATA_PATH = Path(__file__).parent.parent / "data"
@@ -16,7 +17,8 @@ def get_request_text( URL : str ) -> str:
         return pedido.text
 
 if __name__ == "__main__":
-    ANOS = range(2013,2022)
+    thisyear = (datetime.now()).year
+    ANOS = range(2013,thisyear)
     for ano in ANOS:
         print(f"Downloading {ano} data")
         conteudo = get_request_text(get_tabela_url(ano)) 
