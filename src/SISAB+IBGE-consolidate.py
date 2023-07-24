@@ -25,9 +25,14 @@ def add_dv_ibge(mapa: dict, cod: int) -> int:
 def match_populacao_referencia(sisab_row, ibge_df):
     codibge = sisab_row["Ibge"]
     ano = sisab_row["referencia"]//100
-    if ano == 2022:
-        ano = 2021
-    return ibge_df.loc[codibge, str(ano)]
+    populacao = None
+    while populacao is None:
+        try:
+            populacao = ibge_df.loc[codibge, str(ano)]
+        except KeyError:
+            # tenta pegar do ano atual, se der ruim, reduz o ano em 1
+            ano -= 1
+    return populacao
 
 
 if __name__ == "__main__":
